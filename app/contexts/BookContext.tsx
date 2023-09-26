@@ -13,6 +13,7 @@ type BookContextType = {
   setHasSearched: React.Dispatch<React.SetStateAction<boolean>>;
   searchValue: string;
   setSearchValue: React.Dispatch<React.SetStateAction<string>>;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
   isLoading: boolean;
   data?: QueryBooksResponse;
 };
@@ -21,12 +22,14 @@ const BookContext = createContext<BookContextType>({
   setHasSearched: () => {},
   searchValue: "",
   setSearchValue: () => {},
+  setPage: () => {},
   isLoading: false,
 });
 
 export const BookContextProvider = ({ children }: PropsWithChildren<{}>) => {
   const [hasSearched, setHasSearched] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
   const [requestTimeoutId, setRequestTimeoutId] = useState<number>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<QueryBooksResponse>();
@@ -34,7 +37,7 @@ export const BookContextProvider = ({ children }: PropsWithChildren<{}>) => {
   const queryBooks = async () => {
     setIsLoading(true);
     const response = await fetch(
-      `/api/books?${qs.stringify({ search_value: searchValue })}`,
+      `/api/books?${qs.stringify({ search_value: searchValue, page })}`,
     );
     const data: QueryBooksResponse = await response.json();
 
@@ -53,7 +56,7 @@ export const BookContextProvider = ({ children }: PropsWithChildren<{}>) => {
 
     return () => clearTimeout(requestTimeoutId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchValue]);
+  }, [searchValue, page]);
 
   return (
     <BookContext.Provider
@@ -61,6 +64,7 @@ export const BookContextProvider = ({ children }: PropsWithChildren<{}>) => {
         setHasSearched,
         searchValue,
         setSearchValue,
+        setPage,
         isLoading,
         data,
       }}
