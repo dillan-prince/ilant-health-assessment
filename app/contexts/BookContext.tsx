@@ -1,3 +1,5 @@
+import { clearTimeout } from "@/app/contexts/BookContext.utls";
+import { QueryBooksResponse } from "@/app/types";
 import qs from "qs";
 import {
   PropsWithChildren,
@@ -10,40 +12,37 @@ import {
 type BookContextType = {
   searchValue: string;
   setSearchValue: React.Dispatch<React.SetStateAction<string>>;
+  isLoading: boolean;
+  data?: QueryBooksResponse;
 };
 
 const BookContext = createContext<BookContextType>({
   searchValue: "",
   setSearchValue: () => {},
+  isLoading: false,
 });
-
-const clearTimeout = (requestTimeoutId?: number) => {
-  if (requestTimeoutId) {
-    window.clearTimeout(requestTimeoutId);
-  }
-};
 
 export const BookContextProvider = ({ children }: PropsWithChildren<{}>) => {
   const [searchValue, setSearchValue] = useState<string>("");
   const [requestTimeoutId, setRequestTimeoutId] = useState<number>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [data, setData] = useState<QueryBooksResponse>();
 
   const queryBooks = async () => {
+    setIsLoading(true);
     const response = await fetch(
       `/api/books?${qs.stringify({ search_value: searchValue })}`,
     );
-    const data = await response.json();
+    const data: QueryBooksResponse = await response.json();
 
-    console.log(data);
+    setData(data);
     setIsLoading(false);
   };
 
   useEffect(() => {
-    setIsLoading(true);
-
     clearTimeout(requestTimeoutId);
 
-    setTimeout(queryBooks, 100);
+    setRequestTimeoutId(window.setTimeout(queryBooks, 100));
 
     return () => clearTimeout(requestTimeoutId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -54,6 +53,8 @@ export const BookContextProvider = ({ children }: PropsWithChildren<{}>) => {
       value={{
         searchValue,
         setSearchValue,
+        isLoading,
+        data,
       }}
     >
       {children}

@@ -1,3 +1,5 @@
+import plugin from "tailwindcss/plugin"
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -14,5 +16,11 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(({ addBase, theme }) => {
+      addBase({
+        "h1": { fontSize: theme("fontSize.2xl") }
+      })
+    })
+  ],
 }
