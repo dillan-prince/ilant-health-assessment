@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+
 import { Book } from "@/app/types";
 import { useMemo } from "react";
 
@@ -16,20 +18,18 @@ const BookPreview = ({ book }: BookPreviewProps) => {
   return (
     <div className="w-full flex rounded-md bg-stone-100 dark:bg-slate-700 p-4 gap-4">
       <div className="min-w-fit">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={book.volumeInfo.imageLinks?.thumbnail}
-          alt={book.volumeInfo.title}
-        />
+        {book.volumeInfo.imageLinks && (
+          <img
+            src={book.volumeInfo.imageLinks.thumbnail}
+            alt={book.volumeInfo.title}
+          />
+        )}
       </div>
-      <div className="flex flex-col gap-2">
-        <div>
-          <h1 className="inline-block">{book.volumeInfo.title}</h1>
-          <span> - </span>
-          <span className="text-slate-500 dark:text-gray-400">
-            {book.volumeInfo.authors?.join(", ")}
-          </span>
-        </div>
+      <div className="flex flex-col gap-1">
+        <h1 className="inline-block">{book.volumeInfo.title}</h1>
+        <span className="text-slate-500 dark:text-gray-400">
+          {book.volumeInfo.authors?.join(", ")}
+        </span>
         <p>{truncatedDescription}</p>
       </div>
     </div>
