@@ -7,7 +7,7 @@ type BookPreviewProps = {
 
 const BookPreview = ({ book }: BookPreviewProps) => {
   const truncatedDescription = useMemo(() => {
-    const words = book.volumeInfo.description.split(" ");
+    const words = book.volumeInfo.description?.split(" ") ?? [];
     return words.length > 100
       ? `${words.slice(0, 101).join(" ")}...`
       : book.volumeInfo.description;
@@ -18,7 +18,7 @@ const BookPreview = ({ book }: BookPreviewProps) => {
       <div className="min-w-fit">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={book.volumeInfo.imageLinks.thumbnail}
+          src={book.volumeInfo.imageLinks?.thumbnail}
           alt={book.volumeInfo.title}
         />
       </div>
