@@ -4,7 +4,8 @@ import MagnifyingGlass from "@/app/icons/MagnifyingGlass";
 import { useEffect, useState } from "react";
 
 const SearchBar = () => {
-  const { searchValue, setSearchValue, setHasSearched } = useBookContext();
+  const { searchValue, setSearchValue, setHasSearched, setPage } =
+    useBookContext();
 
   const [value, setValue] = useState("");
 
@@ -15,6 +16,7 @@ const SearchBar = () => {
   const search = () => {
     setHasSearched(true);
     setSearchValue(value);
+    setPage(1);
   };
 
   return (

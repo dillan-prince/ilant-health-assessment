@@ -13,6 +13,7 @@ type BookContextType = {
   setHasSearched: React.Dispatch<React.SetStateAction<boolean>>;
   searchValue: string;
   setSearchValue: React.Dispatch<React.SetStateAction<string>>;
+  page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   isLoading: boolean;
   data?: QueryBooksResponse;
@@ -22,6 +23,7 @@ const BookContext = createContext<BookContextType>({
   setHasSearched: () => {},
   searchValue: "",
   setSearchValue: () => {},
+  page: 1,
   setPage: () => {},
   isLoading: false,
 });
@@ -64,6 +66,7 @@ export const BookContextProvider = ({ children }: PropsWithChildren<{}>) => {
         setHasSearched,
         searchValue,
         setSearchValue,
+        page,
         setPage,
         isLoading,
         data,

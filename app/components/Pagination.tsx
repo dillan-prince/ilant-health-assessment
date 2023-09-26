@@ -1,5 +1,4 @@
 import { useBookContext } from "@/app/contexts/BookContext";
-import { useEffect, useState } from "react";
 
 const sharedClasses = "";
 
@@ -24,13 +23,7 @@ const ButtonPlaceholder = () => {
 };
 
 const Pagination = () => {
-  const { data, setPage } = useBookContext();
-  const [currentPage, setCurrentPage] = useState<number>(1);
-
-  useEffect(() => {
-    setPage(currentPage);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
+  const { data, page, setPage } = useBookContext();
 
   if (!data?.totalItems || data.totalItems <= 10) {
     return null;
@@ -38,21 +31,19 @@ const Pagination = () => {
 
   return (
     <div className="flex gap-8 items-center">
-      {currentPage !== 1 ? (
+      {page !== 1 ? (
         <Button
-          onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
+          onClick={() => setPage(Math.max(page - 1, 1))}
           label="Previous"
         />
       ) : (
         <ButtonPlaceholder />
       )}
-      <span className="w-12 text-center">{currentPage}</span>
-      {currentPage * 10 < data.totalItems ? (
+      <span className="w-12 text-center">{page}</span>
+      {page * 10 < data.totalItems ? (
         <Button
           onClick={() =>
-            setCurrentPage(
-              Math.min(currentPage + 1, Math.floor(data.totalItems / 10) + 1),
-            )
+            setPage(Math.min(page + 1, Math.floor(data.totalItems / 10) + 1))
           }
           label="Next"
         />
