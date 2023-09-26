@@ -10,6 +10,7 @@ import {
 } from "react";
 
 type BookContextType = {
+  setHasSearched: React.Dispatch<React.SetStateAction<boolean>>;
   searchValue: string;
   setSearchValue: React.Dispatch<React.SetStateAction<string>>;
   isLoading: boolean;
@@ -17,12 +18,14 @@ type BookContextType = {
 };
 
 const BookContext = createContext<BookContextType>({
+  setHasSearched: () => {},
   searchValue: "",
   setSearchValue: () => {},
   isLoading: false,
 });
 
 export const BookContextProvider = ({ children }: PropsWithChildren<{}>) => {
+  const [hasSearched, setHasSearched] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>("");
   const [requestTimeoutId, setRequestTimeoutId] = useState<number>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -40,6 +43,10 @@ export const BookContextProvider = ({ children }: PropsWithChildren<{}>) => {
   };
 
   useEffect(() => {
+    if (!hasSearched) {
+      return;
+    }
+
     clearTimeout(requestTimeoutId);
 
     setRequestTimeoutId(window.setTimeout(queryBooks, 100));
@@ -51,6 +58,7 @@ export const BookContextProvider = ({ children }: PropsWithChildren<{}>) => {
   return (
     <BookContext.Provider
       value={{
+        setHasSearched,
         searchValue,
         setSearchValue,
         isLoading,

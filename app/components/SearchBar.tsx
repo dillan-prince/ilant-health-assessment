@@ -4,13 +4,18 @@ import MagnifyingGlass from "@/app/icons/MagnifyingGlass";
 import { useEffect, useState } from "react";
 
 const SearchBar = () => {
-  const { searchValue, setSearchValue } = useBookContext();
+  const { searchValue, setSearchValue, setHasSearched } = useBookContext();
 
   const [value, setValue] = useState("");
 
   useEffect(() => {
     setValue(searchValue);
   }, [searchValue]);
+
+  const search = () => {
+    setHasSearched(true);
+    setSearchValue(value);
+  };
 
   return (
     <div className="relative">
@@ -23,7 +28,12 @@ const SearchBar = () => {
         placeholder="Enter search terms..."
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        onBlur={(e) => setSearchValue(e.target.value)}
+        onBlur={search}
+        onKeyUp={(e) => {
+          if (e.code === "Enter") {
+            search();
+          }
+        }}
       />
       {value && (
         <div className="absolute inset-y-0 right-0 flex items-center pr-4">
