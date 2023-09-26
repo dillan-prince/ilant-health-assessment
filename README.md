@@ -22,7 +22,7 @@ npx create-next-app dillan-prince-demo --example "https://github.com/dillan-prin
 
 To begin, you will need a Google Books API key. Instructions on how to create one can be found here [here](https://developers.google.com/books/docs/v1/using#APIKey). You will need a Google developer account and to have created a project in Google Cloud. After that, you can enable the Google Books API for your project via the "Enabled APIs & services" tab, and create an API key via the "Credentials" tab.
 
-Once you have a Google Books API key, create a `Constants.py` file in the `/api` folder:
+Once you have a Google Books API key, create a `Constants.py` file in the `/api` folder, and paste your API key in the below format:
 
 ```python
 API_KEY = "<Your API key>"
