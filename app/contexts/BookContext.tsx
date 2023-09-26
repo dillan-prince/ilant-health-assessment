@@ -1,3 +1,4 @@
+import qs from "qs";
 import {
   PropsWithChildren,
   createContext,
@@ -16,10 +17,37 @@ const BookContext = createContext<BookContextType>({
   setSearchValue: () => {},
 });
 
-export const BookContextProvider = ({ children }: PropsWithChildren<{}>) => {
-  const [searchValue, setSearchValue] = useState("");
+const clearTimeout = (requestTimeoutId?: number) => {
+  if (requestTimeoutId) {
+    window.clearTimeout(requestTimeoutId);
+  }
+};
 
-  useEffect(() => console.log(searchValue), [searchValue]);
+export const BookContextProvider = ({ children }: PropsWithChildren<{}>) => {
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [requestTimeoutId, setRequestTimeoutId] = useState<number>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const queryBooks = async () => {
+    const response = await fetch(
+      `/api/books?${qs.stringify({ search_value: searchValue })}`,
+    );
+    const data = await response.json();
+
+    console.log(data);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+
+    clearTimeout(requestTimeoutId);
+
+    setTimeout(queryBooks, 100);
+
+    return () => clearTimeout(requestTimeoutId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchValue]);
 
   return (
     <BookContext.Provider

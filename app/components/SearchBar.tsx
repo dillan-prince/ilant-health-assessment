@@ -15,9 +15,7 @@ const SearchBar = () => {
   return (
     <div className="relative">
       <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-        <span className="text-gray-500">
-          <MagnifyingGlass />
-        </span>
+        <MagnifyingGlass />
       </div>
       <input
         className="bg-gray-100 dark:bg-slate-700 w-full py-4 px-10 rounded-md"
@@ -29,10 +27,7 @@ const SearchBar = () => {
       />
       {value && (
         <div className="absolute inset-y-0 right-0 flex items-center pr-4">
-          <span
-            className="text-gray-500 cursor-pointer"
-            onClick={() => setSearchValue("")}
-          >
+          <span className="cursor-pointer" onClick={() => setSearchValue("")}>
             <CloseX />
           </span>
         </div>
